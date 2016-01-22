@@ -1,0 +1,15 @@
+{% extends "parcels.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block subcontent %}
+
+    <div class="container">
+        <h2 align="center">Register Package</h2>
+        {{ wtf.quick_form(
+            form,
+            form_type='horizontal',
+            horizontal_columns=('lg', 4, 5)
+            ) }}
+    </div>
+
+{% endblock %}

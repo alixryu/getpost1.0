@@ -1,0 +1,10 @@
+bcrypt==2.0.0
+flake8==2.5.1
+Flask==0.10.1
+Flask-Bootstrap==3.3.5.7
+Flask-Login==0.3.2
+Flask-Mail==0.9.1
+Flask-WTF==0.12
+nose==1.3.7
+psycopg2==2.6.1
+SQLAlchemy==1.0.11

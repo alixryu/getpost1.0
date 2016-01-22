@@ -1,0 +1,17 @@
+{% extends "maraudersmap.html" %}
+
+{% block title %}
+    {{ super() }} Students
+{% endblock %}
+
+{% block content %}
+    <h1 align="center">Welcome to the Student Information Page.</h1>
+        {% if students %}
+            {% for student in students %}
+                <p>{{ student }}</p>
+            {% endfor %}
+        {% elif student %}
+            <p>{{ student }}</p>
+        {% endif %}
+    {% block subcontent %}{% endblock %}
+{% endblock %}

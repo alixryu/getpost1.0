@@ -1,0 +1,59 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    GetPost |
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet", type="text/css", href="/css/footer.css"/>
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle"
+             data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">GetPost</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                {% if current_user.is_authenticated %}
+                <li class="dropdown">
+                    <a href="/packages" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Packages<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/packages">Packages Home</a></li>
+                        <li><a href="/packages/new">Register New Package</a></li>
+                        <li><a href="#">Search Packages</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Edit Packages</a></li>
+                    </ul>
+                </li>
+                <li><a href="/students">Students</a></li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li><a href="/">Hello {{ session.email_address }}</a></li>
+                <li><a href="{{ url_for('fatlady.logout') }}">Log Out</a></li>
+                {% else %}
+                <li><a href="{{ url_for('fatlady.login') }}">Log In</a></li>
+                <li><a href="{{ url_for('fatlady.signup') }}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+{{ super() }}
+{% include "padfoot.html" %}
+{% endblock %}

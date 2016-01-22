@@ -1,0 +1,13 @@
+Dear {{ name }},
+
+You have a package from {{ sender }} waiting for you at the mail room!
+
+To confirm your package arrival please click on the following link:
+
+{{ url_for('owls.view_notifications', package_id=package_id, _external=True) }}
+
+Notification count for this package: {{ notification_count }}
+
+Powered by GetPost
+
+Note: Do not reply to this e-mail. Responses are not monitored.

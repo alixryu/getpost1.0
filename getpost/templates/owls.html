@@ -1,0 +1,17 @@
+{% extends "maraudersmap.html" %}
+
+{% block title %}
+    {{ super() }} Email
+{% endblock %}
+
+{% block content %}
+    <h1 align="center">Welcome to the Email Notification Page.</h1>
+        {% if notifications %}
+            {% for notification in notifications %}
+                <p>{{ notification }}</p>
+            {% endfor %}
+        {% elif notification %}
+            <p>{{ notification }}</p>
+        {% endif %}
+    {% block subcontent %}{% endblock %}
+{% endblock %}
