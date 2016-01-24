@@ -66,3 +66,8 @@ hogwarts_blueprint = Blueprint('hogwarts', __name__, url_prefix='')
 @hogwarts_blueprint.route('/')
 def hogwarts_index():
     return render_template('hogwarts.html')
+
+
+@hogwarts_blueprint.route('/ping')
+def ping():
+    return 'What the brangan.'
