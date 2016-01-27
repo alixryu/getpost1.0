@@ -4,7 +4,7 @@
     {{ super() }} Students
 {% endblock %}
 
-{% block content %}
+{% block subcontent %}
     <h1 align="center">Welcome to the Student Information Page.</h1>
         {% if students %}
             {% for student in students %}
@@ -13,5 +13,5 @@
         {% elif student %}
             <p>{{ student }}</p>
         {% endif %}
-    {% block subcontent %}{% endblock %}
+    {% block subcontent2 %}{% endblock %}
 {% endblock %}

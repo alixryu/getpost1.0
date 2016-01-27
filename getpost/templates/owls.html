@@ -4,7 +4,7 @@
     {{ super() }} Email
 {% endblock %}
 
-{% block content %}
+{% block subcontent %}
     <h1 align="center">Welcome to the Email Notification Page.</h1>
         {% if notifications %}
             {% for notification in notifications %}
@@ -13,5 +13,5 @@
         {% elif notification %}
             <p>{{ notification }}</p>
         {% endif %}
-    {% block subcontent %}{% endblock %}
+    {% block subcontent2 %}{% endblock %}
 {% endblock %}

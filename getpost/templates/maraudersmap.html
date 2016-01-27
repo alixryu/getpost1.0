@@ -57,3 +57,10 @@
 {{ super() }}
 {% include "padfoot.html" %}
 {% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% include "lumos.html" %}
+        {% block subcontent %} {% endblock %}
+    </div>
+{% endblock %}

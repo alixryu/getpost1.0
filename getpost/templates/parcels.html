@@ -4,7 +4,7 @@
     {{ super() }} Packages
 {% endblock %}
 
-{% block content %}
+{% block subcontent %}
     <h1 align="center">Welcome to the Package Management Page.</h1>
         {% if packages %}
             {% for package in packages %}
@@ -21,5 +21,5 @@
             </form>
             </p>
         {% endif %}
-    {% block subcontent %}{% endblock %}
+    {% block subcontent2 %}{% endblock %}
 {% endblock %}
