@@ -8,6 +8,7 @@ from getpost.orm import Session
 from getpost.models import Account
 
 from .. import app, driver
+from .fatlady import test_authentication_integration
 
 
 def test_update_model():

@@ -80,9 +80,15 @@ class Account(UserMixin, Base):
         Enum('student', 'employee', 'administrator', name='account_type')
         )
 
-    student = relationship('StudentRole', uselist=False)
-    employee = relationship('EmployeeRole', uselist=False)
-    administrator = relationship('AdministratorRole', uselist=False)
+    student = relationship(
+        'StudentRole', uselist=False, passive_deletes='all'
+        )
+    employee = relationship(
+        'EmployeeRole', uselist=False, passive_deletes='all'
+        )
+    administrator = relationship(
+        'AdministratorRole', uselist=False, passive_deletes='all'
+        )
 
     def set_password(self, password):
         self.password = hashpw(bytes(password, 'ASCII'), gensalt())
@@ -110,7 +116,7 @@ class AdministratorRole(Base):
     __tablename__ = 'administrator_role'
 
     id = Column(Integer, primary_key=True)
-    account_id = Column(Integer, ForeignKey('account.id'))
+    account_id = Column(Integer, ForeignKey('account.id', ondelete='CASCADE'))
     first_name = Column(String)
     last_name = Column(String)
 
@@ -123,7 +129,7 @@ class EmployeeRole(Base):
     __tablename__ = 'employee_role'
 
     id = Column(Integer, primary_key=True)
-    account_id = Column(Integer, ForeignKey('account.id'))
+    account_id = Column(Integer, ForeignKey('account.id', ondelete='CASCADE'))
     first_name = Column(String)
     last_name = Column(String)
 
@@ -140,7 +146,7 @@ class StudentRole(Base):
     __tablename__ = 'student_role'
 
     id = Column(Integer, primary_key=True)
-    account_id = Column(Integer, ForeignKey('account.id'))
+    account_id = Column(Integer, ForeignKey('account.id', ondelete='CASCADE'))
     first_name = Column(String)
     last_name = Column(String)
     student_info = Column(Integer, ForeignKey('student.id'))
