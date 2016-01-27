@@ -18,9 +18,7 @@ def create_app(config_obj):
     app = Flask(__name__)
     app.config.from_object(config_obj)
 
-    login_manager.session_protection = 'strong'
-    login_manager.login_view = 'fatlady.login'
-
+    configure_login_manager()
     register_blueprints(app)
     install_error_handlers(app)
     install_static_routers(app)
@@ -30,6 +28,12 @@ def create_app(config_obj):
     login_manager.init_app(app)
 
     return app
+
+
+def configure_login_manager():
+    login_manager.session_protection = 'strong'
+    login_manager.login_view = 'fatlady.login'
+    login_manager.login_message_category = 'error'
 
 
 def register_blueprints(app):
