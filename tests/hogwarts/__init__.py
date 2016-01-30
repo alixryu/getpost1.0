@@ -9,6 +9,7 @@ from getpost.models import Account
 
 from .. import app, driver
 from .fatlady import test_authentication_integration
+from .househead import test_requires_roles, test_switch_role_selenium
 
 
 def test_update_model():

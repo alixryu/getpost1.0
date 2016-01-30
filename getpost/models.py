@@ -76,9 +76,6 @@ class Account(UserMixin, Base):
     email_address = Column(String, unique=True)
     password = Column(Binary)
     verified = Column(Boolean)
-    role = Column(
-        Enum('student', 'employee', 'administrator', name='account_type')
-        )
 
     student = relationship(
         'StudentRole', uselist=False, passive_deletes='all'
@@ -105,11 +102,39 @@ class Account(UserMixin, Base):
         user_session.update(
             {
                 'email_address': self.email_address,
+                'current_role': self.get_roles()[0],
                 }
             )
 
     def log_out(self):
         user_session.pop('email_address', None)
+        user_session.pop('current_role', None)
+
+    def get_roles(self):
+        account_roles = []
+
+        if self.administrator:
+            account_roles.append(self.administrator.__tablename__)
+        if self.employee:
+            account_roles.append(self.employee.__tablename__)
+        if self.student:
+            account_roles.append(self.student.__tablename__)
+
+        return account_roles
+
+    def get_current_role(self):
+        return user_session['current_role']
+
+    def switch_current_role(self, role):
+        if role in self.get_roles():
+            user_session.update(
+                {
+                    'current_role': role
+                    }
+                )
+            return True
+        else:
+            return False
 
 
 class AdministratorRole(Base):

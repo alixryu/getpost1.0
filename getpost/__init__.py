@@ -42,9 +42,10 @@ def register_blueprints(app):
     from .hogwarts.owls import owls_blueprint
     from .hogwarts.parcels import parcels_blueprint
     from .hogwarts.wizards import wizards_blueprint
+    from .hogwarts.househead import househead_blueprint
 
     blueprints = [
-        hogwarts_blueprint, fatlady_blueprint,
+        hogwarts_blueprint, fatlady_blueprint, househead_blueprint,
         owls_blueprint, parcels_blueprint, wizards_blueprint,
     ]
 
