@@ -102,7 +102,8 @@ def install_error_handlers(app):
 def install_static_routers(app):
     static_directory = join(abspath(dirname(__file__)), 'static/')
 
-    css_codenames = {'footer.css': 'padfoot.css'}
+    css_codenames = {'footer.css': 'padfoot.css',
+                     'error.css': 'voldemort.css'}
 
     @app.route('/css/<path:path>')
     def send_css(path):
