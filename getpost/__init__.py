@@ -4,10 +4,12 @@
 from os.path import join, dirname, abspath
 
 from flask import Flask, render_template, send_from_directory
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, AnonymousUserMixin
 from flask.ext.mail import Mail
 from flask.ext.bootstrap import Bootstrap
 
+
+ANONYMOUS_ROLE = 'anonymous_role'
 
 mail = Mail()
 bootstrap = Bootstrap()
@@ -31,9 +33,15 @@ def create_app(config_obj):
 
 
 def configure_login_manager():
+
+    class MyAnonymousUser(AnonymousUserMixin):
+        def get_current_role(self):
+            return ANONYMOUS_ROLE
+
     login_manager.session_protection = 'strong'
     login_manager.login_view = 'fatlady.login'
     login_manager.login_message_category = 'error'
+    login_manager.anonymous_user = MyAnonymousUser
 
 
 def register_blueprints(app):

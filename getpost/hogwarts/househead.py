@@ -7,9 +7,11 @@ from flask import Blueprint, redirect
 from flask import flash, request, url_for, abort
 from flask.ext.login import current_user, login_required
 
+from .. import ANONYMOUS_ROLE
 from ..models import StudentRole, EmployeeRole, AdministratorRole
 
 
+ANONYMOUS_ROLE = ANONYMOUS_ROLE
 ADMIN_ROLE = AdministratorRole.__tablename__
 EMPLOYEE_ROLE = EmployeeRole.__tablename__
 STUDENT_ROLE = StudentRole.__tablename__

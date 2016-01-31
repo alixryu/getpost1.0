@@ -5,15 +5,20 @@ from flask import Blueprint, render_template, redirect, session as user_session
 from flask import flash, request, url_for
 from flask.ext.login import login_required, login_user, logout_user
 
-from ..orm import Session
 from ..forms import LoginForm, SignupForm
 from ..models import Account, Student, StudentRole
+from ..orm import Session
+from .househead import requires_roles
+from .househead import ANONYMOUS_ROLE, EMPLOYEE_ROLE, ADMIN_ROLE
 
 
 fatlady_blueprint = Blueprint('fatlady', __name__, url_prefix='/auth')
 
+logout_required = requires_roles(ANONYMOUS_ROLE)
+
 
 @fatlady_blueprint.route('/login/', methods=['GET', 'POST'])
+@logout_required
 def login():
     """Log in with e-mail address and password.
 
@@ -106,6 +111,7 @@ def deauthenticate_user():
 
 
 @fatlady_blueprint.route('/signup/student/', methods=['GET', 'POST'])
+@requires_roles(ANONYMOUS_ROLE, EMPLOYEE_ROLE, ADMIN_ROLE)
 def signup():
     """Sign up and create a new account.
 
