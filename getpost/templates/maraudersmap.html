@@ -42,6 +42,23 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
                 <li><a href="/">Hello {{ session.email_address }}</a></li>
+                {% set roles = current_user.get_roles() %}
+                {% if roles|length > 1 %}
+                <li class="dropdown">
+                    <a href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Role<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {% if 'administrator_role' in roles %}
+                        <li><a href="{{ url_for('househead.switch_role', role='administrator_role') }}">Admin</a></li>
+                        {% endif %}
+                        {% if 'employee_role' in roles %}
+                        <li><a href="{{ url_for('househead.switch_role', role='employee_role') }}">Employee</a></li>
+                        {% endif %}
+                        {% if 'student_role' in roles %}
+                        <li><a href="{{ url_for('househead.switch_role', role='student_role') }}">Student</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endif %}
                 <li><a href="{{ url_for('fatlady.logout') }}">Log Out</a></li>
                 {% else %}
                 <li><a href="{{ url_for('fatlady.login') }}">Log In</a></li>
