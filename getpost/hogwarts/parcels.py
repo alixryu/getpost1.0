@@ -3,13 +3,14 @@
 """
 from datetime import datetime
 
-from flask import Blueprint, render_template, redirect, session as user_session
+from flask import Blueprint, render_template, redirect
 from flask import abort, flash, request, url_for
-from flask.ext.login import login_required
+from flask.ext.login import login_required, current_user as account
 
 from . import update_model
+from .househead import EMPLOYEE_ROLE, STUDENT_ROLE, requires_roles
 from ..forms import CreatePackageForm
-from ..models import Account, Package, Student
+from ..models import Package, Student
 from ..orm import Session
 
 
@@ -18,20 +19,18 @@ parcels_blueprint = Blueprint('parcels', __name__, url_prefix='/packages')
 
 @parcels_blueprint.route('/')
 @login_required
+@requires_roles(EMPLOYEE_ROLE, STUDENT_ROLE)
 def parcels_index():
-    db_session = Session()
-
-    account = db_session.query(
-        Account
-        ).filter_by(id=user_session['user_id']).first()
-    if account.student:
+    if account.get_current_role() == STUDENT_ROLE:
         return redirect(url_for('.view_packages_self'), 303)
     else:
-        return render_template('parcels.html')
+        # return render_template('parcels.html')
+        return redirect(url_for('.view_packages_self'), 303)
 
 
 @parcels_blueprint.route('/me/')
 @login_required
+@requires_roles(EMPLOYEE_ROLE, STUDENT_ROLE)
 def view_packages_self():
     """View packages designated or assigned to user.
 
@@ -41,22 +40,16 @@ def view_packages_self():
         Render template for viewing packages.
 
     """
-    account_id = user_session['user_id']
-
     db_session = Session()
-
-    account = db_session.query(
-        Account
-        ).filter_by(id=user_session['user_id']).first()
 
     base_query = db_session.query(Package)
 
-    if account.student:
+    if account.get_current_role() == STUDENT_ROLE:
         student_id = account.student.student_info
         packages = base_query.filter_by(student_id=student_id).all()
         return render_template('parcels.html', packages=packages)
-    elif account.employee:
-        packages = base_query.filter_by(received_by=account_id).all()
+    elif account.get_current_role() == EMPLOYEE_ROLE:
+        packages = base_query.filter_by(received_by=account.employee.id).all()
         return render_template('parcels.html', packages=packages)
     else:
         abort(404)
@@ -64,6 +57,7 @@ def view_packages_self():
 
 @parcels_blueprint.route('/student/<int:student_id>/')
 @login_required
+@requires_roles(EMPLOYEE_ROLE)
 def view_packages_by_student_id(student_id):
     """View packages designated to student with id ``student_id``.
 
@@ -82,6 +76,7 @@ def view_packages_by_student_id(student_id):
 
 @parcels_blueprint.route('/<int:package_id>')
 @login_required
+@requires_roles(EMPLOYEE_ROLE, STUDENT_ROLE)
 def view_package_details(package_id):
     """View package details of package with id ``package_id``.
 
@@ -92,15 +87,12 @@ def view_package_details(package_id):
         Render template for viewing packages details.
 
     """
-    account_id = user_session['user_id']
-
     db_session = Session()
-    account = db_session.query(Account).filter_by(id=account_id).first()
     package = db_session.query(Package).filter_by(id=package_id).first()
-    student_id = account.student.student_info
 
-    if ((account.student and student_id == package.student_id) or
-            account.employee):
+    if (account.get_current_role() == EMPLOYEE_ROLE or
+            (account.get_current_role() == STUDENT_ROLE and
+                package.student_id == account.student.student_info)):
         return render_template('parcels.html', package=package)
     else:
         abort(404)
@@ -108,6 +100,7 @@ def view_package_details(package_id):
 
 @parcels_blueprint.route('/new', methods=['GET', 'POST'])
 @login_required
+@requires_roles(EMPLOYEE_ROLE)
 def create_package():
     """Create a new package instance.
 
@@ -127,9 +120,6 @@ def create_package():
 
         db_session = Session()
 
-        account = db_session.query(
-            Account
-            ).filter_by(id=user_session['user_id']).first()
         student = db_session.query(
             Student
             ).filter_by(ocmr=ocmr).first()
@@ -156,6 +146,7 @@ def create_package():
 
 @parcels_blueprint.route('/<int:package_id>', methods=['PUT'])
 @login_required
+@requires_roles(EMPLOYEE_ROLE)
 def edit_package(package_id):
     """Edit package details of package with id ``package_id``.
 
@@ -194,6 +185,7 @@ def edit_package(package_id):
 
 @parcels_blueprint.route('/<int:package_id>', methods=['DELETE'])
 @login_required
+@requires_roles(EMPLOYEE_ROLE)
 def delete_package(package_id):
     """Delete package instance with id ``package_id``.
 

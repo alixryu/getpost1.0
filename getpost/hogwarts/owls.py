@@ -6,24 +6,27 @@ from threading import Thread
 
 from flask import Blueprint, current_app, flash, redirect, render_template
 from flask import url_for, abort, session as user_session
-from flask.ext.login import login_required
+from flask.ext.login import login_required, current_user as account
 from flask.ext.mail import Message
 
 from .. import mail
 from ..models import Account, Notification, Package
 from ..orm import Session
+from .househead import requires_roles, EMPLOYEE_ROLE, STUDENT_ROLE
 
 
 owls_blueprint = Blueprint('owls', __name__, url_prefix='/email')
 
 
 @owls_blueprint.route('/')
+@login_required
 def owls_index():
     return render_template('owls.html')
 
 
 @owls_blueprint.route('/<int:package_id>/', methods=['POST'])
 @login_required
+@requires_roles(EMPLOYEE_ROLE)
 def send_notification(package_id):
     """Send e-mail and create a :class:`getpost.models.Notification` object.
 
@@ -76,6 +79,7 @@ def send_notification(package_id):
 
 @owls_blueprint.route('/<int:package_id>/')
 @login_required
+@requires_roles(EMPLOYEE_ROLE, STUDENT_ROLE)
 def view_notifications(package_id):
     """View notifications of package with package id ``package_id``.
 
@@ -88,11 +92,9 @@ def view_notifications(package_id):
         Render template to display notifications otherwise.
 
     """
-    account_id = user_session['user_id']
-
     db_session = Session()
-    account = db_session.query(Account).filter_by(id=account_id).first()
-    if account.student:
+
+    if account.get_current_role() == STUDENT_ROLE:
         return redirect(
             url_for('.view_notifications_self', package_id=package_id)
             )
@@ -104,6 +106,7 @@ def view_notifications(package_id):
 
 @owls_blueprint.route('/me/<int:package_id>/')
 @login_required
+@requires_roles(STUDENT_ROLE)
 def view_notifications_self(package_id):
     """View notifications of package with package id ``package_id``.
 
@@ -118,11 +121,7 @@ def view_notifications_self(package_id):
     package = db_session.query(
         Package
         ).filter_by(id=package_id).first()
-    account = db_session.query(
-        Account
-        ).filter_by(id=user_session['user_id']).first()
-    if (not account.student or
-            account.student.student_info != package.student_id):
+    if account.student.student_info != package.student_id:
         abort(403)
     notifications = db_session.query(
         Notification
