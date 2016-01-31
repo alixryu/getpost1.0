@@ -2,10 +2,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 from flask import Blueprint, render_template, redirect, url_for
-from flask import abort, session as user_session
 from flask.ext.login import login_required, current_user as account
 
-from ..orm import Session
 from .househead import requires_roles, EMPLOYEE_ROLE, STUDENT_ROLE
 
 wizards_blueprint = Blueprint('wizards', __name__, url_prefix='/students')

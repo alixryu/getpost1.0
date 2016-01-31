@@ -5,12 +5,12 @@ from datetime import datetime
 from threading import Thread
 
 from flask import Blueprint, current_app, flash, redirect, render_template
-from flask import url_for, abort, session as user_session
+from flask import url_for, abort
 from flask.ext.login import login_required, current_user as account
 from flask.ext.mail import Message
 
 from .. import mail
-from ..models import Account, Notification, Package
+from ..models import Notification, Package
 from ..orm import Session
 from .househead import requires_roles, EMPLOYEE_ROLE, STUDENT_ROLE
 

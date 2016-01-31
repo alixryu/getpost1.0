@@ -28,8 +28,8 @@ def requires_roles(*roles):
     Returns:
         wrapper (func): Curried function if designated role is present in
             :class:`flask.ext.login.current_user`,
-        abort (Exception): :class:`werkzeug.exceptions.Forbidden` exception if no
-            designated role is present.
+        abort (Exception): :class:`werkzeug.exceptions.Forbidden` exception if
+            no designated role is present.
     """
     def wrapper(f):
         @wraps(f)
