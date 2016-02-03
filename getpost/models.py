@@ -62,10 +62,7 @@ class Student(Base):
     t_number = Column(String)
     email_address = Column(String)
 
-    packages = relationship(
-        'Package',
-        lazy='joined'
-        )
+    packages = relationship('Package')
     role = relationship('StudentRole', uselist=False)
 
 
@@ -159,10 +156,7 @@ class EmployeeRole(Base):
     last_name = Column(String)
 
     account = relationship('Account')
-    packages = relationship(
-        'Package',
-        lazy='joined'
-        )
+    packages = relationship('Package')
 
     login_attributes = ['first_name', 'last_name']
 

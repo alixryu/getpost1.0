@@ -9,7 +9,7 @@ from flask.ext.login import login_required, current_user as account
 
 from . import update_model
 from .househead import EMPLOYEE_ROLE, STUDENT_ROLE, requires_roles
-from ..forms import CreatePackageForm
+from ..forms import CreatePackageForm, ModelForm, EditPackageForm
 from ..models import Package, Student
 from ..orm import Session
 
@@ -90,10 +90,15 @@ def view_package_details(package_id):
     db_session = Session()
     package = db_session.query(Package).filter_by(id=package_id).first()
 
+    if not package:
+        abort(404)
+
+    package_form = EditPackageForm(obj=package)
+
     if (account.get_current_role() == EMPLOYEE_ROLE or
             (account.get_current_role() == STUDENT_ROLE and
                 package.student_id == account.student.student_info)):
-        return render_template('parcels.html', package=package)
+        return render_template('parcels.html', package=package_form)
     else:
         abort(404)
 

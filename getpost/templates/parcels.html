@@ -1,4 +1,5 @@
 {% extends "maraudersmap.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}
     {{ super() }} Packages
@@ -7,19 +8,50 @@
 {% block subcontent %}
     <h1 align="center">Welcome to the Package Management Page.</h1>
         {% if packages %}
-            {% for package in packages %}
-                <p>{{ package }}
-                <form action="/email/{{ package.id }}/" method="POST" class="inputform" id="sendemailform">
-                <input type="submit" value="Send Notification Email!" />
-                </form>
-                </p>
-            {% endfor %}
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Packages</div>
+
+                <!-- Table -->
+                <table class="table">
+                    <thead></thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Sender</th>
+                            <th>Arrival Date</th>
+                            <th>Receiver</th>
+                            <th>Status</th>
+                            <th>Pick Up Date</th>
+                            <th>Notifications</th>
+                            <th>Send Notification</th>
+                        </tr>
+                    <tbody>
+                        {% for package in packages %}
+                        <tr>
+                            <th>{{ package.student_id }}</th>
+                            <th>{{ package.sender_name }}</th>
+                            <th>{{ package.arrival_date }} Date</th>
+                            <th>{{ package.received_by }}</th>
+                            <th>{{ package.status }}</th>
+                            <th>{{ package.pickup_date }}</th>
+                            <th> <a href="/email/{{ package.id }}/" class="btn btn-info" role="button">View</a> </th>
+                            <th> <form action="/email/{{ package.id }}/" method="POST" id="sendemailform">
+                <input type="submit" class="btn btn-info" value="Send">
+                </form> </th>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% elif package %}
-            <p>{{ package }}
-            <form action="/email/{{ package.id }}/" method="POST" class="inputform" id="sendemailform">
-            <input type="submit" value="Send Notification Email!" />
-            </form>
-            </p>
+            <div class="container">
+                <h2 align="center">Package Details</h2>
+                    {{ wtf.quick_form(
+                        package,
+                        form_type='horizontal',
+                        horizontal_columns=('lg', 4, 5)
+                        ) }}
+            </div>
         {% endif %}
     {% block subcontent2 %}{% endblock %}
 {% endblock %}

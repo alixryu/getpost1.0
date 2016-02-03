@@ -1,4 +1,5 @@
 {% extends "maraudersmap.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}
     {{ super() }} Students
@@ -11,7 +12,14 @@
                 <p>{{ student }}</p>
             {% endfor %}
         {% elif student %}
-            <p>{{ student }}</p>
+            <div class="container">
+                <h2 align="center">Student Details</h2>
+                    {{ wtf.quick_form(
+                        student,
+                        form_type='horizontal',
+                        horizontal_columns=('lg', 4, 5)
+                        ) }}
+            </div>
         {% endif %}
     {% block subcontent2 %}{% endblock %}
 {% endblock %}
