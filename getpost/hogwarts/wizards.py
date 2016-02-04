@@ -19,7 +19,7 @@ def wizards_index():
     if account.get_current_role() == STUDENT_ROLE:
         return redirect(url_for('.view_student_self'), 303)
     else:
-        return render_template('wizards.html')
+        return redirect(url_for('.view_students'), 303)
 
 
 @wizards_blueprint.route('/me/')
@@ -39,7 +39,7 @@ def view_student_self():
 @wizards_blueprint.route('/<int:student_id>/')
 @login_required
 @requires_roles(EMPLOYEE_ROLE)
-def view_students(student_id):
+def view_student_detail(student_id):
     student = db_session.query(
             Student
             ).filter_by(id=student_id).first()
@@ -54,6 +54,20 @@ def view_students(student_id):
         )
     student_form = StudentForm(obj=student)
     return render_template('wizards.html', student=student_form)
+
+
+@wizards_blueprint.route('/all/')
+@login_required
+@requires_roles(EMPLOYEE_ROLE)
+def view_students():
+    students = db_session.query(
+            Student
+            ).all()
+
+    if not students:
+        abort(404)
+
+    return render_template('wizards.html', students=students)
 
 
 @wizards_blueprint.route('/<int:id>/', methods=['PUT'])

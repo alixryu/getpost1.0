@@ -103,7 +103,7 @@ def view_package_details(package_id):
         abort(404)
 
 
-@parcels_blueprint.route('/new', methods=['GET', 'POST'])
+@parcels_blueprint.route('/new/', methods=['GET', 'POST'])
 @login_required
 @requires_roles(EMPLOYEE_ROLE)
 def create_package():
