@@ -9,7 +9,7 @@ from flask.ext.login import login_required, current_user as account
 
 from . import update_model
 from .househead import EMPLOYEE_ROLE, STUDENT_ROLE, requires_roles
-from ..forms import CreatePackageForm, ModelForm, EditPackageForm
+from ..forms import CreatePackageForm, EditPackageForm
 from ..models import Package, Student
 from ..orm import Session
 
@@ -103,7 +103,7 @@ def view_package_details(package_id):
         abort(404)
 
 
-@parcels_blueprint.route('/new', methods=['GET', 'POST'])
+@parcels_blueprint.route('/new/', methods=['GET', 'POST'])
 @login_required
 @requires_roles(EMPLOYEE_ROLE)
 def create_package():
