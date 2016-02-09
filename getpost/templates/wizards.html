@@ -7,7 +7,16 @@
 
 {% block subcontent %}
     <h1 align="center">Welcome to the Student Information Page.</h1>
-        {% if students %}
+        {% if search_form %}
+            <h2 align="center">Search Student</h2>
+            <div class="col-lg-6" align="left">
+                {{ wtf.quick_form(
+                    search_form,
+                    role='search',
+                    form_type='inline'
+                    ) }}
+            </div>
+        {% elif students %}
             <div class="panel panel-default">
                 <!-- Default panel contents -->
                 <div class="panel-heading">Students</div>
@@ -39,11 +48,11 @@
                     </tbody>
                 </table>
             </div>
-        {% elif student %}
+        {% elif student_form %}
             <div class="container">
                 <h2 align="center">Student Details</h2>
                     {{ wtf.quick_form(
-                        student,
+                        student_form,
                         form_type='horizontal',
                         horizontal_columns=('lg', 4, 5)
                         ) }}

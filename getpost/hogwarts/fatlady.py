@@ -187,7 +187,6 @@ def create_account(email, t_number, password):
         account = Account(
             email_address=email,
             verified=True,
-            role='student'
             )
         account.set_password(password)
         db_session.add(account)

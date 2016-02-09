@@ -9,7 +9,7 @@ from flask.ext.login import login_required, current_user as account
 
 from . import update_model
 from .househead import EMPLOYEE_ROLE, STUDENT_ROLE, requires_roles
-from ..forms import CreatePackageForm, ModelForm, EditPackageForm
+from ..forms import CreatePackageForm, EditPackageForm
 from ..models import Package, Student
 from ..orm import Session
 

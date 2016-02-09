@@ -68,6 +68,13 @@ class SignupForm(Form):
     submit = SubmitField('Register')
 
 
+class StudentSearchForm(Form):
+    query = StringField(
+        'Search Keywords'
+        )
+    submit = SubmitField('Search')
+
+
 def ModelForm(model, db_session, exclude=None):
     return model_form(
         model=model,
