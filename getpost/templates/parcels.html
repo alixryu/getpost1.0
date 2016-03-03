@@ -28,10 +28,10 @@
                     <tbody>
                         {% for package in packages %}
                         <tr>
-                            <th>{{ package.student_id }}</th>
+                            <th>{{ package.student.first_name }} {{ package.student.last_name }}</th>
                             <th>{{ package.sender_name }}</th>
                             <th>{{ package.arrival_date }}</th>
-                            <th>{{ package.received_by }}</th>
+                            <th>{{ package.employee.first_name }} {{ package.employee.last_name }}</th>
                             <th>{{ package.status }}</th>
                             <th>{{ package.pickup_date }}</th>
                             <th> <a href="/email/{{ package.id }}/" class="btn btn-info" role="button">View</a> </th>

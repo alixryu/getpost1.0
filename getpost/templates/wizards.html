@@ -32,6 +32,7 @@
                             <th>T Number</th>
                             <th>E-mail Address</th>
                             <th>Create Package</th>
+                            <th>View Packages</th>
                         </tr>
                     <tbody>
                         {% for student in students %}
@@ -43,6 +44,8 @@
                             <th>{{ student.t_number }}</th>
                             <th>{{ student.email_address }}</th>
                             <th> <a href="/packages/new/" class="btn btn-info" role="button">New Package</a> </th>
+
+                            <th> <a href="/packages/student/{{ student.id }}" class="btn btn-info" role="button">View Packages</a> </th>
                         </tr>
                         {% endfor %}
                     </tbody>
