@@ -4,10 +4,12 @@
 from os.path import join, dirname, abspath
 
 from flask import Flask, render_template, send_from_directory
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, AnonymousUserMixin
 from flask.ext.mail import Mail
 from flask.ext.bootstrap import Bootstrap
 
+
+ANONYMOUS_ROLE = 'anonymous_role'
 
 mail = Mail()
 bootstrap = Bootstrap()
@@ -18,9 +20,7 @@ def create_app(config_obj):
     app = Flask(__name__)
     app.config.from_object(config_obj)
 
-    login_manager.session_protection = 'strong'
-    login_manager.login_view = 'fatlady.login'
-
+    configure_login_manager()
     register_blueprints(app)
     install_error_handlers(app)
     install_static_routers(app)
@@ -32,15 +32,28 @@ def create_app(config_obj):
     return app
 
 
+def configure_login_manager():
+
+    class MyAnonymousUser(AnonymousUserMixin):
+        def get_current_role(self):
+            return ANONYMOUS_ROLE
+
+    login_manager.session_protection = 'strong'
+    login_manager.login_view = 'fatlady.login'
+    login_manager.login_message_category = 'error'
+    login_manager.anonymous_user = MyAnonymousUser
+
+
 def register_blueprints(app):
     from .hogwarts import hogwarts_blueprint
     from .hogwarts.fatlady import fatlady_blueprint
     from .hogwarts.owls import owls_blueprint
     from .hogwarts.parcels import parcels_blueprint
     from .hogwarts.wizards import wizards_blueprint
+    from .hogwarts.househead import househead_blueprint
 
     blueprints = [
-        hogwarts_blueprint, fatlady_blueprint,
+        hogwarts_blueprint, fatlady_blueprint, househead_blueprint,
         owls_blueprint, parcels_blueprint, wizards_blueprint,
     ]
 
@@ -98,7 +111,8 @@ def install_error_handlers(app):
 def install_static_routers(app):
     static_directory = join(abspath(dirname(__file__)), 'static/')
 
-    css_codenames = {'footer.css': 'padfoot.css'}
+    css_codenames = {'footer.css': 'padfoot.css',
+                     'error.css': 'voldemort.css'}
 
     @app.route('/css/<path:path>')
     def send_css(path):

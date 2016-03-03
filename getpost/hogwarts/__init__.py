@@ -21,6 +21,18 @@ ALLL_REWR = 0x6
 
 
 def update_model(model, identifier_key, identifier_value, **kwargs):
+    """Update model instance.
+
+    Args:
+        model (:cls:`getpost.orm.ReprBase`): Model to update.
+        identifier_key (str): Key to query model.
+        identifier_value (str): Value to query model.
+        **kwargs: attribute keys and values to update.
+
+    Returns:
+        row_count (int): number of rows affected by update.
+
+    """
     db_session = Session()
     row_count = db_session.query(
         model
@@ -29,7 +41,6 @@ def update_model(model, identifier_key, identifier_value, **kwargs):
             synchronize_session=False
             )
     db_session.commit()
-    db_session.close()
 
     return row_count
 
@@ -66,3 +77,8 @@ hogwarts_blueprint = Blueprint('hogwarts', __name__, url_prefix='')
 @hogwarts_blueprint.route('/')
 def hogwarts_index():
     return render_template('hogwarts.html')
+
+
+@hogwarts_blueprint.route('/ping')
+def ping():
+    return 'What the brangan.'

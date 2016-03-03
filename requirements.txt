@@ -7,4 +7,6 @@ Flask-Mail==0.9.1
 Flask-WTF==0.12
 nose==1.3.7
 psycopg2==2.6.1
+selenium==2.49.2
 SQLAlchemy==1.0.11
+SQLAlchemy-Searchable==0.9.3
