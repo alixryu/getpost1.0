@@ -1,4 +1,5 @@
 {% extends "maraudersmap.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}
     {{ super() }} Students
@@ -6,12 +7,59 @@
 
 {% block subcontent %}
     <h1 align="center">Welcome to the Student Information Page.</h1>
-        {% if students %}
-            {% for student in students %}
-                <p>{{ student }}</p>
-            {% endfor %}
-        {% elif student %}
-            <p>{{ student }}</p>
+        {% if search_form %}
+            <h2 align="center">Search Student</h2>
+            <div class="col-lg-6" align="left">
+                {{ wtf.quick_form(
+                    search_form,
+                    role='search',
+                    form_type='inline'
+                    ) }}
+            </div>
+        {% elif students %}
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Students</div>
+
+                <!-- Table -->
+                <table class="table">
+                    <thead></thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Preferred Name</th>
+                            <th>OCMR</th>
+                            <th>T Number</th>
+                            <th>E-mail Address</th>
+                            <th>Create Package</th>
+                            <th>View Packages</th>
+                        </tr>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <th>{{ student.first_name }}</th>
+                            <th>{{ student.last_name }}</th>
+                            <th>{{ student.alternative_name }}</th>
+                            <th>{{ student.ocmr }}</th>
+                            <th>{{ student.t_number }}</th>
+                            <th>{{ student.email_address }}</th>
+                            <th> <a href="/packages/new/" class="btn btn-info" role="button">New Package</a> </th>
+
+                            <th> <a href="/packages/student/{{ student.id }}" class="btn btn-info" role="button">View Packages</a> </th>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% elif student_form %}
+            <div class="container">
+                <h2 align="center">Student Details</h2>
+                    {{ wtf.quick_form(
+                        student_form,
+                        form_type='horizontal',
+                        horizontal_columns=('lg', 4, 5)
+                        ) }}
+            </div>
         {% endif %}
     {% block subcontent2 %}{% endblock %}
 {% endblock %}

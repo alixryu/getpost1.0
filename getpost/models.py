@@ -4,6 +4,8 @@
 from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer
 from sqlalchemy import String, Boolean, Binary
 from sqlalchemy.orm import relationship
+from sqlalchemy_searchable import make_searchable
+from sqlalchemy_utils import TSVectorType
 
 from bcrypt import hashpw, gensalt
 from flask import session as user_session
@@ -11,6 +13,9 @@ from flask.ext.login import UserMixin
 
 from . import login_manager
 from .orm import Base, Session
+
+
+make_searchable()
 
 
 class Package(Base):
@@ -62,10 +67,16 @@ class Student(Base):
     t_number = Column(String)
     email_address = Column(String)
 
-    packages = relationship(
-        'Package',
-        lazy='joined'
-        )
+    search_vector = Column(TSVectorType(
+        'first_name',
+        'last_name',
+        'alternative_name',
+        'ocmr',
+        't_number',
+        'email_address'
+        ))
+
+    packages = relationship('Package')
     role = relationship('StudentRole', uselist=False)
 
 
@@ -159,10 +170,7 @@ class EmployeeRole(Base):
     last_name = Column(String)
 
     account = relationship('Account')
-    packages = relationship(
-        'Package',
-        lazy='joined'
-        )
+    packages = relationship('Package')
 
     login_attributes = ['first_name', 'last_name']
 
